@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  become: true
+  become_user: root
+  vars:
+    iptables:
+      hypervisor: False
+      pingables:
+      - host: all_hosts
+        ip: 0.0.0.0
+      chains:
+      - name: HTTP
+        comment: "http"
+        protocol: tcp  # tcp/icmp/udp
+        ports:
+        - 80
+        - 443
+
+  roles:
+  - ansible-role-iptables
+...

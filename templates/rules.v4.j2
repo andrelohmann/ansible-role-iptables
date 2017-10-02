@@ -1,0 +1,36 @@
+# This file is managed by ansible
+*filter
+:INPUT DROP [0:0]
+{% if iptables.hypervisor is defined and iptables.hypervisor %}
+:FORWARD ACCEPT [0:0]
+{% else %}
+:FORWARD DROP [0:0]
+{% endif %}
+:OUTPUT ACCEPT [0:0]
+:fail2ban-ssh - [0:0]
+{% for chain in iptables.chains %}
+:c-{{ chain.name}} - [0:0]
+{% endfor %}
+-A INPUT -i lo -m comment --comment "loopback incoming" -j ACCEPT
+-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p tcp -m multiport --dports 22 -j fail2ban-ssh
+-A fail2ban-ssh -j RETURN
+{% if iptables.pingables is defined %}
+{% for pingable in iptables.pingables %}
+-A INPUT -p icmp -s {{ pingable.ip }} -m comment --comment "allow ping from {{ pingable.host }}" -j ACCEPT
+{% endfor %}
+{% endif %}
+-A INPUT -p icmp -m comment --comment "drop ping" -j DROP
+-A INPUT -p tcp --dport 22 -j ACCEPT
+{% for chain in iptables.chains %}
+-A INPUT -p {{ chain.protocol }} -m multiport --dports {{ chain.ports | join(",") }} -j c-{{ chain.name}}
+{% if chain.sources is defined %}
+{% for source in chain.sources %}
+-A c-{{ chain.name}} -s {{ source.ip }} -m comment --comment "{{ source.host }}" -j ACCEPT
+{% endfor %}
+-A c-{{ chain.name}} -j DROP
+{% else %}
+-A c-{{ chain.name}} -j ACCEPT
+{% endif %}
+{% endfor %}
+COMMIT

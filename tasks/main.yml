@@ -1,0 +1,23 @@
+---
+
+- name: install packages
+  apt:
+    name: "{{item}}"
+    state: installed
+    dpkg_options: 'force-confnew,force-confdef'
+    autoremove: yes
+  with_items:
+  - fail2ban
+  - iptables
+  - iptables-persistent
+
+- name: add iptables
+  template:
+    src: rules.v4.j2
+    dest: /etc/iptables/rules.v4
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+  notify: apply iptables
+...
