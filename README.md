@@ -44,7 +44,7 @@ Example Playbook
 
     - hosts: all
       roles:
-         - { role: andrelohmann.ansible-role-iptables }
+         - { role: andrelohmann.iptables }
 
 License
 -------
