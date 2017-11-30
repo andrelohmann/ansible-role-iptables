@@ -22,7 +22,7 @@
 {% endif %}
 -A INPUT -p icmp -m comment --comment "drop ping" -j DROP
 -A INPUT -p tcp --dport 22 -j ACCEPT
-{% iptables.custom_pre_rules is defined %}
+{% if iptables.custom_pre_rules is defined %}
 {% for custom_rule in iptables.custom_pre_rules %}
 custom_rule
 {% endfor %}
@@ -38,7 +38,7 @@ custom_rule
 -A c-{{ chain.name}} -j ACCEPT
 {% endif %}
 {% endfor %}
-{% iptables.custom_post_rules is defined %}
+{% if iptables.custom_post_rules is defined %}
 {% for custom_rule in iptables.custom_post_rules %}
 custom_rule
 {% endfor %}
