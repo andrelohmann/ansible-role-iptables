@@ -14,10 +14,11 @@ Create a list all chains, which should allow access to the host.
 
 
     iptables:
-      hypervisor: False  # True if forwarding needs to be allowed
+      router: False  # True if forwarding needs to be allowed
       pingables:  # hosts, that are allowed to ping the target
       - host: monitoring_host
         ip: X.X.X.X
+      custom_pre_rules: [] # add custom rules
       chains:
       - name: HTTP
         comment: "all HTTP and HTTPS Traffic"
@@ -33,6 +34,7 @@ Create a list all chains, which should allow access to the host.
         sources:
         - host: mysql_read_slave
           ip: X.X.X.X
+      custom_post_rules: []
 
 Requirements
 ------------

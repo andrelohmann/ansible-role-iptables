@@ -1,7 +1,7 @@
 # This file is managed by ansible
 *filter
 :INPUT DROP [0:0]
-{% if iptables.hypervisor is defined and iptables.hypervisor %}
+{% if iptables.router is defined and iptables.router %}
 :FORWARD ACCEPT [0:0]
 {% else %}
 :FORWARD DROP [0:0]
@@ -22,6 +22,11 @@
 {% endif %}
 -A INPUT -p icmp -m comment --comment "drop ping" -j DROP
 -A INPUT -p tcp --dport 22 -j ACCEPT
+{% if iptables.custom_pre_rules is defined %}
+{% for custom_rule in iptables.custom_pre_rules %}
+custom_rule
+{% endfor %}
+{% endif %}
 {% for chain in iptables.chains %}
 -A INPUT -p {{ chain.protocol }} -m multiport --dports {{ chain.ports | join(",") }} -j c-{{ chain.name}}
 {% if chain.sources is defined %}
@@ -33,4 +38,9 @@
 -A c-{{ chain.name}} -j ACCEPT
 {% endif %}
 {% endfor %}
+{% if iptables.custom_post_rules is defined %}
+{% for custom_rule in iptables.custom_post_rules %}
+custom_rule
+{% endfor %}
+{% endif %}
 COMMIT
