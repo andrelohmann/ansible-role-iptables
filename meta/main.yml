@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: iptables
   author: andrelohmann
   description: ansible galaxy role to install and configure iptables
   company: smartformer UG
@@ -12,9 +13,7 @@ galaxy_info:
     - name: Ubuntu
       versions:
       - xenial
-    - name: Debian
-      versions:
-      - stretch
+      - bionic
 
   galaxy_tags:
   - iptables
