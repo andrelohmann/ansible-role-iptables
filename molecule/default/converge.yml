@@ -4,7 +4,7 @@
 
   vars:
     iptables:
-      router: False
+      router: false
       pingables:
       - host: all_hosts
         ip: 0.0.0.0

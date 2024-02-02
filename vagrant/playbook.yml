@@ -5,7 +5,20 @@
 
   vars:
 
-    role_config: []
+    iptables:
+      custom_nat_rules:
+      - "-A PREROUTING -p tcp -m tcp --dport 443 -j REDIRECT --to-ports 8006"
+      router: false
+      pingables:
+      - host: all_hosts
+        ip: 0.0.0.0
+      chains:
+      - name: HTTP
+        comment: "http"
+        protocol: tcp  # tcp/icmp/udp
+        ports:
+        - 80
+        - 443
 
   pre_tasks:
   - name: check for file custom_vars.yml
@@ -19,6 +32,6 @@
 
   roles:
   - andrelohmann.root_colored_prompt
-  - ansible-role-__ROLE_NAME__
+  - ansible-role-iptables
 
 ...

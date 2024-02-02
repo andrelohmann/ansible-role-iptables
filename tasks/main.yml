@@ -1,13 +1,13 @@
 ---
 
-- name: install packages
-  apt:
+- name: Apt | Install packages
+  ansible.builtin.apt:
     name: "{{ packages }}"
-    state: latest
+    state: present
     dpkg_options: 'force-confnew,force-confdef'
-    autoclean: yes
-    autoremove: yes
-    update_cache: yes
+    autoclean: true
+    autoremove: true
+    update_cache: true
     cache_valid_time: 3600
   vars:
     packages:
@@ -15,13 +15,14 @@
     - iptables
     - iptables-persistent
 
-- name: add iptables
-  template:
-    src: rules.v4.j2
+- name: Template | Add iptables
+  ansible.builtin.template:
+    src: rules.v4
     dest: /etc/iptables/rules.v4
     owner: root
     group: root
     mode: '0644'
-    backup: yes
-  notify: apply iptables
+    backup: true
+  notify: Handler | Apply iptables
+
 ...

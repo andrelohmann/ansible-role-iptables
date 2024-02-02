@@ -18,6 +18,8 @@ Create a list all chains, which should allow access to the host.
 
     iptables:
       router: False  # True if forwarding needs to be allowed
+      custom_nat_rules: # custom nat table rules
+      - "-A PREROUTING -p tcp -m tcp --dport 443 -j REDIRECT --to-ports 8006"
       pingables:  # hosts, that are allowed to ping the target
       - host: monitoring_host
         ip: X.X.X.X

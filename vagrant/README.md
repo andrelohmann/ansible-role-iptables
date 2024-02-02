@@ -27,4 +27,7 @@ molecule test --all
 
 ### Test the installation
 
-DESCRIBE, HOW THE INSTALLATION CAN BE TESTED MANUALLY
+```
+iptables-restore --test /etc/iptables/rules.v4
+systemctl status iptables.service
+```
