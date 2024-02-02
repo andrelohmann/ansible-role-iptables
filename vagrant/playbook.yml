@@ -1,0 +1,37 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+
+  vars:
+
+    iptables:
+      custom_nat_rules:
+      - "-A PREROUTING -p tcp -m tcp --dport 443 -j REDIRECT --to-ports 8006"
+      router: false
+      pingables:
+      - host: all_hosts
+        ip: 0.0.0.0
+      chains:
+      - name: HTTP
+        comment: "http"
+        protocol: tcp  # tcp/icmp/udp
+        ports:
+        - 80
+        - 443
+
+  pre_tasks:
+  - name: check for file custom_vars.yml
+    stat:
+      path: custom_vars.yml
+    register: stat_custom_vars
+  - name: load custom vars, if existent
+    include_vars:
+      file: custom_vars.yml
+    when: stat_custom_vars.stat.exists
+
+  roles:
+  - andrelohmann.root_colored_prompt
+  - ansible-role-iptables
+
+...

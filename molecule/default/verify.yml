@@ -1,0 +1,25 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+
+  - name: Get iptables status
+    ansible.builtin.shell: iptables-restore --test /etc/iptables/rules.v4
+    args:
+      executable: /bin/bash
+    register: _iptables_status
+
+  - name: Debug _iptables_status
+    ansible.builtin.debug:
+      var: _iptables_status
+
+  - name: Assert _iptables_status.rc equals 0
+    ansible.builtin.assert:
+      that:
+      - _iptables_status.rc == 0
+      - _iptables_status.failed == false
+
+...

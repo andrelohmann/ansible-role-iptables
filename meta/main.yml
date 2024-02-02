@@ -3,17 +3,17 @@ galaxy_info:
   role_name: iptables
   author: andrelohmann
   description: ansible galaxy role to install and configure iptables
-  company: smartformer UG
+  company: CloudCourse GmbH
 
   license: MIT
 
-  min_ansible_version: 2.7
+  min_ansible_version: "2.11"
 
   platforms:
-    - name: Ubuntu
-      versions:
-      - xenial
-      - bionic
+  - name: Ubuntu
+    versions:
+    - focal
+    - jammy
 
   galaxy_tags:
   - iptables

@@ -1,4 +1,22 @@
 # This file is managed by ansible
+# nat table
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+{% if iptables.custom_nat_rules is defined %}
+{% for custom_nat_rule in iptables.custom_nat_rules %}
+{{ custom_nat_rule }}
+{% endfor %}
+{% endif %}
+COMMIT
+# raw table
+*raw
+:PREROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+COMMIT
+# filter table
 *filter
 :INPUT DROP [0:0]
 {% if iptables.router is defined and iptables.router %}
@@ -24,7 +42,7 @@
 -A INPUT -p tcp --dport 22 -j ACCEPT
 {% if iptables.custom_pre_rules is defined %}
 {% for custom_rule in iptables.custom_pre_rules %}
-custom_rule
+{{ custom_rule }}
 {% endfor %}
 {% endif %}
 {% for chain in iptables.chains %}
@@ -40,7 +58,7 @@ custom_rule
 {% endfor %}
 {% if iptables.custom_post_rules is defined %}
 {% for custom_rule in iptables.custom_post_rules %}
-custom_rule
+{{ custom_rule }}
 {% endfor %}
 {% endif %}
 COMMIT

@@ -1,10 +1,10 @@
 ---
-- hosts: localhost
-  become: true
-  become_method: sudo
+- name: Converge
+  hosts: all
+
   vars:
     iptables:
-      router: False
+      router: false
       pingables:
       - host: all_hosts
         ip: 0.0.0.0
@@ -16,6 +16,8 @@
         - 80
         - 443
 
-  roles:
-  - ansible-role-iptables
+  tasks:
+  - name: "Include andrelohmann.iptables"
+    include_role:
+      name: "andrelohmann.iptables"
 ...
