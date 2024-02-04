@@ -15,6 +15,27 @@
     - iptables
     - iptables-persistent
 
+- name: Fail2ban | Add jail.local file
+  ansible.builtin.file:
+    path: /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode: '0644'
+    state: touch
+    modification_time: preserve
+    access_time: preserve
+
+- name: Fail2ban | Debian bugfix
+  ansible.builtin.blockinfile:
+    path: /etc/fail2ban/jail.local
+    marker: "# <!-- {mark} sshd bugfix ANSIBLE MANAGED BLOCK -->"
+    block: |
+      [sshd]
+      backend = systemd
+      enabled = true
+  when: ansible_distribution == 'Debian'
+  notify: Handler | Restart fail2ban
+
 - name: Template | Add iptables
   ansible.builtin.template:
     src: rules.v4
