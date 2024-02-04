@@ -6,4 +6,10 @@
     executable: /bin/bash
   changed_when: false
 
+- name: Handler | Restart fail2ban
+  ansible.builtin.systemd:
+    name: fail2ban
+    state: restarted
+  changed_when: false
+
 ...
