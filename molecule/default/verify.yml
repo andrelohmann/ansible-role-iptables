@@ -11,6 +11,7 @@
     args:
       executable: /bin/bash
     register: _iptables_status
+    changed_when: false
 
   - name: Debug _iptables_status
     ansible.builtin.debug:
