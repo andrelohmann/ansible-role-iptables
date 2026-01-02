@@ -33,7 +33,7 @@
       [sshd]
       backend = systemd
       enabled = true
-  when: ansible_distribution == 'Debian'
+  when: ansible_facts["distribution"] == 'Debian'
   notify: Handler | Restart fail2ban
 
 - name: Template | Add iptables
